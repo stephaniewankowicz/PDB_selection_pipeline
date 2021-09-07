@@ -1,3 +1,9 @@
+'''
+This script will determine the apo structure closest in resolution to the holo structure of interest. 
+Input: Original list of PDBs along with the resolution
+Output: Final list of PDBs selecting the structures with the closest resolution. 
+'''
+
 import pandas as pd
 
 data = pd.read_csv('/wynton/group/fraser/swankowicz/PDB_pairs_191202.txt', sep=" ", header=None)
