@@ -4,8 +4,12 @@ This repository contains a list of scripts that can be used to find and create i
 
 The original intent was to select ligand bound and ligand unbound structures however this can be adapted to look for other PDB pairs. 
 
-The pipeline starts with a list of PDB IDs with your specification (type of experiment, resolution, ect). This can be obtained from the PDB (). This pipeline will also require you to have phenix installed as well as a conda enviornment that contains the following packages:
+The pipeline starts with a list of PDB IDs with your specification (type of experiment, resolution, ect). This can be obtained from the PDB (). This pipeline will also require you to have phenix installed, qFit installed, as well as a conda enviornment that contains the following packages (you can install these packages into the same conda env that qFit sits in):
 
+os
+sys
+pandas
+Bio.PDB
 
 Run these scripts in this order:
 
@@ -17,4 +21,6 @@ Run these scripts in this order:
 
 
 Other scripts in this directory:
+
+1) submission script: This was used to organized/submit jobs to the Wynton server so we could go through multiple holo PDBs at the same time.
  
