@@ -1,4 +1,10 @@
 #
+
+'''
+This script will only compare the sequences between a list of potential pairs. 
+Input: PDB ID, folder/file with list of potential pairs
+Output: Pair list
+'''
    line=$1
    SEQ1=$(grep ${line} /wynton/group/fraser/swankowicz/sequences_missed_191226.txt | head -n 1 | awk '{print $2}')
    echo $SEQ1
