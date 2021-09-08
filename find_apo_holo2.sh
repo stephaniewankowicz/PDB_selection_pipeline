@@ -7,8 +7,6 @@
    
 #file=/wynton/group/fraser/swankowicz/PDB_2A_res_w_lig_191123_2001_2500.txt
 for line in $(cat $file); do
-   #echo 'first' >> /wynton/group/fraser/swankowicz/191123_pdbs_examined.txt
-   #echo $line >> /wynton/group/fraser/swankowicz/191123_pdbs_examined.txt
    if grep -Fxq ${line} /wynton/group/fraser/swankowicz/nomtz_191123.txt; then
       exit 1
    else
@@ -51,10 +49,6 @@ for line in $(cat $file); do
       fi
    file2=/wynton/group/fraser/swankowicz/PDB_2A_noligand.txt
    for line2 in $(cat $file2); do
-      #line2=$(echo ${line21} | tr '[:upper:]' '[:lower:]')
-      #if grep -Fxq ${line2} /wynton/group/fraser/swankowicz/PDB_2A_res_w_lig_111419.txt; then
-      #   continue
-         #echo $line2 
          RESO2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $2}')
          SPACE2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $3}') 
          if (( `echo ${RESO2}'<='${RESO1_upper} | bc` )) && (( `echo ${RESO2}'>='${RESO1_lower} | bc` )); then
@@ -71,9 +65,7 @@ for line in $(cat $file); do
            fi
          fi
    done
-   #SEQ1=$(~/anaconda3/envs/qfit3/bin/python /wynton/group/fraser/swankowicz/get_seq.py /wynton/group/fraser/swankowicz/mtz/191114/pdb${line}.ent)
    SEQ1=$(grep ${line} /wynton/group/fraser/swankowicz/sequences_all_191203.txt | head -n 1 | awk '{print $2}')
-   echo $SEQ1
    file3=/wynton/group/fraser/swankowicz/pairs_191202/${line}_potential_pairs.txt
    for line2 in $(cat $file3); do
        echo $line2

@@ -2,8 +2,8 @@
 
 '''
 This script will go through the mtz dump files and extrac out the resolution, space group, and unit cell angles/dimensions and comapre them between the two potential pairs. If everything is within the specific criteria, then the script will output the pair as well as the values stated above into a text file
-Input:
-Output: 
+Input: 2 PDB IDs to compare
+Output: List of matched PDBs
 '''
 
 
