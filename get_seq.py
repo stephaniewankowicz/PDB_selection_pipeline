@@ -6,20 +6,15 @@ from sys import stdout
 import Bio
 from Bio.PDB import PDBParser, PPBuilder, PDBIO
 
-def get_sequence(pdb): #,chain='A'):
-    pdb_parser = PDBParser(PERMISSIVE=0)                    # The PERMISSIVE instruction allows PDBs presenting errors.
+def get_sequence(pdb):
+    pdb_parser = PDBParser(PERMISSIVE=0)
     pdb_structure = pdb_parser.get_structure(pdb,pdb)
     chain=''
     chain_list=[]
     for chains in pdb_structure.get_chains():
-        #ABC = chains.get_id()
         chain_list.append(chains.get_id())
-    if 'A' in chain_list:
-        chain='A'
-    elif 'X' in chain_list:
-        chain='X'
-    elif 'B' in chain_list:
-        chain='B'
+    sorted_chains = sorted(chain_list)
+    chain = sorted_chains[0]
     pdb_chain = pdb_structure[0][chain]
     for residue in pdb_chain:
         id = residue.id
@@ -32,21 +27,15 @@ def get_sequence(pdb): #,chain='A'):
     Sequence = ""
     for pp in ppb.build_peptides(pdb_chain):
         Sequence = Sequence + pp.get_sequence()
-    #print(">"+pdb[-8:-4]+chain)
-    #len_seq = len(str(Sequence))
     if len(str(Sequence)) > 0:
        print(str(Sequence))
     else:
        print('no sequence obtained')
-    #with open(pdb[-8:-4] + '_seq.txt', 'w') as file:
-    #    file.write(str(Sequence))
 
 if __name__ == '__main__':
     argc = len(sys.argv)
-    if argc < 2 or argc > 3:
-        print("Usage: getsequence.py Filename [Chain=A]")
+    if argc != 2:
+        print("Usage: get_seq.py PDB.pdb")
     else:
         if argc == 2:
             get_sequence(sys.argv[1])
-        else:
-            get_sequence(sys.argv[1],sys.argv[2][0])
