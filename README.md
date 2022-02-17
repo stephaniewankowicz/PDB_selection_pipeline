@@ -17,11 +17,16 @@ Bio.PDB
 This repository contains a list of scripts that can be used to find and create isomorphous PDB pairs with the same sequence. The original intent was to select ligand bound and ligand unbound structures however this can be adapted to look for other PDB pairs. 
 
 
-Run these scripts in this order:
+The first scripts will take an input of a text file of PDB IDs (one PDB per line[example](https://github.com/stephaniewankowicz/PDB_selection_pipeline/blob/master/PDB_ID_2A_res.txt)).
 
-Run the following script with the input of a text file of PDB IDs (one PDB per line[example]). 
-#download PDB
-#
+Use get_PDB_info.sh if you want to run the script serially (ie going through each PDB at one time).
+
+Use get_PDB_info_paralell.sh if you want to use a SGE server to submit jobs one by one to look at PDB info.
+
+
+
+ 
+
 
 
 1) run_mtz_dump.sh: This script will go through the cif files, unzip them, convert them to mtz and run the mtz dump command. This will provide information on the resolution, space group, and unit cell of the PDBs. This pipeline is set up to be run on the UCSF Wynton servers where there is a local copy of the PDB. If this does not exist for you, please amend this script to download the mtz from the PDB
