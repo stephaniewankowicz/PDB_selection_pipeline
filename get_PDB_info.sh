@@ -8,6 +8,7 @@
 
 #____________________________________________SOURCE REQUIREMENTS____________________________________
 source phenix_env.sh #source phenix (fill in phenix location)
+source activate qfit #conda env with qFit 
 
 #________________________________________________INPUTS________________________________________________
 base_folder='/wynton/group/fraser/swankowicz/191227_qfit/' #base folder (where you want to put folders/pdb files
@@ -29,10 +30,15 @@ while read -r line; do
 
 
 #____________________________________RUN MTZ DUMP & EXTRACT CRYSTALLOGRAPHIC INFO____________________________
-  mid=$(echo ${PDB:1:2})
   phenix.cif_as_mtz ${PDB}_ --ignore_bad_sigmas --extend_flags --merge #transfer cif into mtz file
   phenix.mtz.dump $PDB.mtz > /wynton/group/fraser/swankowicz/mtz/191114/mtz_dump/${pdb}.dump #run mtz dump
 
-
-
+#__________________________________________DETERMINE HOLO OR APO___________________________________________
+  find_largest_lig ${PDB}.pdb ${PDB}
+  lig_name=$(cat ${PDB}_ligand_name.txt)
+  if [ ! = ${lig_name} ]; then
+      echo ${PDB} ${lig_name} >> PDB_Holo.txt.  #PDB has ligand that is considered a potential 'holo'
+  else
+      echo ${PDB} >> PDB_Apo.txt #PDB is considered apo.
+  fi
 done < $file
