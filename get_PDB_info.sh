@@ -11,8 +11,8 @@ source phenix_env.sh #source phenix (fill in phenix location)
 source activate qfit #conda env with qFit 
 
 #________________________________________________INPUTS________________________________________________
-base_folder='/wynton/group/fraser/swankowicz/191227_qfit/' #base folder (where you want to put folders/pdb files
-pdb_filelist=/wynton/group/fraser/swankowicz/script/comp_omit4.txt
+base_folder='/location/you/would/like/folders/of/PDBs/to/exist/' #base folder (where you want to put folders/pdb files)
+pdb_filelist=PDB_ID_2A_res.txt
 
 #_________________________________________DOWNLOAD PDB/MTZ FILES AND CREATE FOLDERS_________________________
 while read -r line; do
