@@ -34,11 +34,16 @@ while read -r line; do
   phenix.mtz.dump $PDB.mtz > /wynton/group/fraser/swankowicz/mtz/191114/mtz_dump/${pdb}.dump #run mtz dump
 
 #__________________________________________DETERMINE HOLO OR APO___________________________________________
-  find_largest_lig ${PDB}.pdb ${PDB}
+  find_largest_lig.py ${PDB}.pdb ${PDB}. #this script comes from qFit
   lig_name=$(cat ${PDB}_ligand_name.txt)
   if [ ! = ${lig_name} ]; then
       echo ${PDB} ${lig_name} >> PDB_Holo.txt.  #PDB has ligand that is considered a potential 'holo'
   else
       echo ${PDB} >> PDB_Apo.txt #PDB is considered apo.
   fi
+
+#__________________________________________ GET SEQUENCE FROM PDB______________________________________________
+  SEQ1=$(python get_seq.py ${PDB}.pdb) #get_seq.py can be found in this repository
+  echo "> ${PDB} ${SEQ1}" >> /wynton/group/fraser/swankowicz/sequences.txt
+  
 done < $file
