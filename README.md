@@ -25,17 +25,14 @@ This repository contains a list of scripts that can be used to find and create i
 
 
 
-2) find_apo_holo.sh: This script will go through and match up each holo structure with potential apo structures based on resolution, unit cell, and space group. The second half of the script will them compare the potential pairs by sequence. 
+2) This second set of scripts will go through and match up each holo structure with potential apo structures based on resolution, unit cell, and space group. The second half of the script will them compare the potential pairs by sequence. 
+    a) Use find_apo_holo.sh if you want to run the script serially (ie going through each PDB at one time).
+    b) Use find_apo_holo_parallel_submit.sh if you want to use a SGE server to submit jobs one by one to look at PDB info.
 
 
-3) select_for_qfit.py: OPTIONAL! This script will subset down your pairs to a list of only one apo structure for every holo structure.
+3) select_for_qfit.py: OPTIONAL! This script will subset down your pairs to a list of only one apo structure for every holo structure, selecting for the closest in resolution
 
 
 Other scripts in this directory:
 
 1) get_seq.py: This script will use Bio.PDB to get the sequence directly from the PDBs we are looking to compare (this will be a more accurate way to gather sequences and include gaps/missing residues.)
-
-2) find_apo_holo_seqonly.sh: This script will go from a list of potential pairs and compare the sequences. 
-
-
-4) seq_align.sh: This is a stand alone script that will compare sequences and place sequences in a list of each overlap versus an overlap minus/plus the first or last 5 amino acids.
