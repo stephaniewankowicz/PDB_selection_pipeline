@@ -17,16 +17,18 @@ Bio.PDB
 This repository contains a list of scripts that can be used to find and create isomorphous PDB pairs with the same sequence. The original intent was to select ligand bound and ligand unbound structures however this can be adapted to look for other PDB pairs. 
 
 
-The first scripts will take an input of a text file of PDB IDs (one PDB per line [example](https://github.com/stephaniewankowicz/PDB_selection_pipeline/blob/master/PDB_ID_2A_res.txt)).
+1) The first scripts will take an input of a text file of PDB IDs (one PDB per line [example](https://github.com/stephaniewankowicz/PDB_selection_pipeline/blob/master/PDB_ID_2A_res.txt)).
 
-Use get_PDB_info.sh if you want to run the script serially (ie going through each PDB at one time).
+    a) Use get_PDB_info.sh if you want to run the script serially (ie going through each PDB at one time).
 
-Use get_PDB_info_parallel_submit.sh if you want to use a SGE server to submit jobs one by one to look at PDB info.
+    b) Use get_PDB_info_parallel_submit.sh if you want to use a SGE server to submit jobs one by one to look at PDB info.
 
 
 
-5) find_apo_holo.sh: This script will go through and match up each holo structure with potential apo structures based on resolution, unit cell, and space group. The second half of the script will them compare the potential pairs by sequence. 
-6) select_for_qfit.py: This script will subset down your pairs to a list of only one apo structure for every holo structure.
+2) find_apo_holo.sh: This script will go through and match up each holo structure with potential apo structures based on resolution, unit cell, and space group. The second half of the script will them compare the potential pairs by sequence. 
+
+
+3) select_for_qfit.py: OPTIONAL! This script will subset down your pairs to a list of only one apo structure for every holo structure.
 
 
 Other scripts in this directory:
