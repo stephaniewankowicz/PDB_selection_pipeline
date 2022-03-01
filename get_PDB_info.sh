@@ -17,7 +17,7 @@ pdb_filelist=PDB_ID_2A_res.txt
 #_________________________________________DOWNLOAD PDB/MTZ FILES AND CREATE FOLDERS_________________________
 while read -r line; do
   PDB=$line
-  cd $base_folder
+  cd ${base_folder}
   if [ -d "/$PDB" ]; then
     echo "Folder exists." 
   else
@@ -38,7 +38,7 @@ while read -r line; do
   UNIT1=$(grep "Unit cell:" ${PDB}.dump | tail -n 1 | sed "s/[(),]//g" | awk '{print $3,$4,$5,$6,$7,$8}')
   RESO1=$(grep "^Resolution" ${PDB}.dump | head -n 1 | awk '{print $4}')
 
-  echo $line $RESO1 $SPACE1 $UNIT1 >> space_unit_reso.txt
+  echo $line $RESO1 $SPACE1 $UNIT1 >> ${base_folder}/space_unit_reso.txt
 #__________________________________________DETERMINE HOLO OR APO___________________________________________
   find_largest_lig.py ${PDB}.pdb ${PDB}. #this script comes from qFit
   lig_name=$(cat ${PDB}_ligand_name.txt)
