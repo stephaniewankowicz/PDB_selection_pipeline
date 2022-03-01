@@ -3,7 +3,7 @@
 The pipeline starts with a list of PDB IDs with your specification (type of experiment, resolution, ect). This can be obtained from the [PDB](https://www.rcsb.org/). 
 
 Pipeline Requirements:
-[Phenix](https://phenix-online.org/documentation/install-setup-run.html). 
+[Phenix](https://phenix-online.org/documentation/install-setup-run.html)<br/> 
 [qFit](https://github.com/ExcitedStates/qfit-3.0)
 
 Conda enviornment that contains the following packages (you can install these packages into the same conda env that qFit sits in):
