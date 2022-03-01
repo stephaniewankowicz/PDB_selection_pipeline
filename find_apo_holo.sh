@@ -7,9 +7,6 @@
 #$ -V
 
 
-'''
-This script
-'''
 base_dir=''
 file=/wynton/group/fraser/swankowicz/apo_done2.txt
 for i in {2..1268}; do
