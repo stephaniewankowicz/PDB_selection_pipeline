@@ -66,35 +66,36 @@ while read apo_PDB; do
            fi
          fi
        fi
-   done
-   SEQ1=$(~/anaconda3/envs/qfit3/bin/python /wynton/group/fraser/swankowicz/selecting_apo_holo/get_seq.py ${base_dir}/${line}/${line}.pdb)
-   file3=/wynton/group/fraser/swankowicz/apo_pairs/${line}_potential_pairs.txt
-   for line2 in $(cat $file3); do
-       echo $line2
-       if [ ! -f /wynton/group/fraser/swankowicz/AWS_refine_done/${line}/${line}_qFit.pdb ]; then
-          echo 'not found'
+   done<$holo_file
+   #now we have a list of potential pairs, and we are going to go through and match up the more difficult things 
+   
+   SEQ1=$(grep ${apo_PDB} ${base_dir}/sequences.txt | head -n 1 | awk '{print $2}')
+   pot_pairs=${base_dir}/potential_pairs/${apo_PDB}_potential_pairs.txt
+   for pair in $(cat $pot_pairs); do
+       if [ ! -f ${base_dir}/${pair}/${pair}.pdb ]; then
+          echo 'PDB not found'
           continue
        fi
-       RESO2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $2}')
-       UNIT2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
-       SEQ2=$(~/anaconda3/envs/qfit3/bin/python /wynton/group/fraser/swankowicz/selecting_apo_holo/get_seq.py ${base_dir}/${line}/${line}.pdb)
-                if [[ -z ${SEQ1} ]]; then
-                    continue
-                elif [[ -z ${SEQ2} ]]; then
-                   continue
-                else
-                   if [ "$SEQ1" = "$SEQ2" ]; then
-                     echo $line $line2 $RESO1 $RESO2 >> /wynton/group/fraser/swankowicz/apo_pairs.txt
-                   else
-                     SEQ1_end5=${SEQ1:-5}
-                     SEQ2_end5=${SEQ2:-5}
-                     SEQ1_begin5=${SEQ1:5}
-                     SEQ2_begin5=${SEQ2:5}
-                     if [ "$SEQ1" = "$SEQ2_begin5" ] || [ "$SEQ1" = "$SEQ2_end5" ] || [ "$SEQ2" = "$SEQ1_end5" ] || [ "$SEQ2" = "$SEQ1_begin5" ]; then
-                       echo $line $line2 $RESO1 $RESO2 >> /wynton/group/fraser/swankowicz/apo_pairs.txt
-                     fi
-                   fi
+       RESO2=$(grep ${pair} ${base_dir}/space_unit_reso.txt | head -n 1 | awk '{print $2}')
+       UNIT2=$(grep ${pair} ${base_dir}space_unit_reso.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
+       SEQ2=$(grep ${pair} ${base_dir}/sequences.txt | head -n 1 | awk '{print $2}')
+           if [[ -z ${SEQ1} ]]; then
+              continue
+           elif [[ -z ${SEQ2} ]]; then
+              continue
+           else
+              if [ "$SEQ1" = "$SEQ2" ]; then
+                 echo $line $line2 $RESO1 $RESO2 >> ${base_dir}/holo_apo_pairs.txt
+              else
+                 SEQ1_end5=${SEQ1:-5}
+                 SEQ2_end5=${SEQ2:-5}
+                 SEQ1_begin5=${SEQ1:5}
+                 SEQ2_begin5=${SEQ2:5}
+                 if [ "$SEQ1" = "$SEQ2_begin5" ] || [ "$SEQ1" = "$SEQ2_end5" ] || [ "$SEQ2" = "$SEQ1_end5" ] || [ "$SEQ2" = "$SEQ1_begin5" ]; then
+                       echo $line $line2 $RESO1 $RESO2 >> ${base_dir}/holo_apo_pairs.txt
+                 fi
               fi
+           fi
    done
   fi
 done <$apo_file
