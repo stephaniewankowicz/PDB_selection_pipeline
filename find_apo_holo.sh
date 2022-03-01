@@ -5,19 +5,27 @@
 #$ -l h_rt=100:00:00
 #$ -R yes
 #$ -V
+'''
+This script will take the information on the cystallographic and sequence information of each holo and apo structure and decide if they are pairs.
+INPUT:
+OUTPUT: Text file with a list of paired PDBs with the resolution of each of them.
+'''
 
+#____________________________________________SOURCE REQUIREMENTS____________________________________
+source phenix_env.sh #source phenix (fill in phenix location)
+source activate qfit #conda env with qFit 
 
-base_dir=''
-file=/wynton/group/fraser/swankowicz/apo_done2.txt
-for i in {2..1268}; do
-      line=$(cat $file | awk '{ print $1 }' |head -n $i | tail -n 1)
-      echo ${line}
-      if [ -f ${base_dir}/${line}/${line}.pdb ]; then
-         RESO1=$(grep ${line} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $2}')
-         SPACE1=$(grep ${line} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $3}')
+base_dir = '/this/is/where/your/PDB/folders/are'
+apo_file=PDB_Apo.txt #this is an output file from get_PDB_info or get_PDB_info_parallel
+
+while read PDB; do 
+      echo ${PDB}
+      if [ -f ${base_dir}/${PDB}/${PDB}.pdb ]; then
+         RESO1=$(grep ${PDB} space_unit_reso.txt | head -n 1 | awk '{print $2}')
+         SPACE1=$(grep ${PDB} space_unit_reso.txt | head -n 1 | awk '{print $3}')
          RESO1_lower=$(echo ${RESO1}-0.1 | bc -l)
          RESO1_upper=$(echo ${RESO1}+0.1 | bc -l)
-         UNIT1=$(grep ${line} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
+         UNIT1=$(grep ${PDB} space_unit_reso.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
          UNIT1_out=$UNIT1
          UNIT1=( $UNIT1 )
          UNIT1_0_lower=$(echo ${UNIT1[0]}-1 | bc -l)
@@ -37,6 +45,8 @@ for i in {2..1268}; do
 
          UNIT1_5_lower=$(echo ${UNIT1[5]}-1 | bc -l)
          UNIT1_5_upper=$(echo ${UNIT1[5]}+1 | bc -l)
+         
+         
    file2=/wynton/group/fraser/swankowicz/apo_done2.txt
    for line2 in $(cat $file2); do
       #echo ${line2}
@@ -89,6 +99,6 @@ for i in {2..1268}; do
               fi
    done
   fi
-done
+done <$apo_file
     
 
