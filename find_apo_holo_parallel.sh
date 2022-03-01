@@ -9,7 +9,7 @@ OUTPUT: Text file with a list of paired PDBs with the resolution of each of them
 source phenix_env.sh #source phenix (fill in phenix location)
 source activate qfit #conda env with qFit 
 
-base_dir = '/this/is/where/your/PDB/folders/are'
+base_dir=$2
 
 
 apo_PDB=$1
