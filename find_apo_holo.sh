@@ -17,15 +17,17 @@ source activate qfit #conda env with qFit
 
 base_dir = '/this/is/where/your/PDB/folders/are'
 apo_file=PDB_Apo.txt #this is an output file from get_PDB_info or get_PDB_info_parallel
+cd ${base_dir}
+mkdir potential_pairs
 
-while read PDB; do 
-      echo ${PDB}
-      if [ -f ${base_dir}/${PDB}/${PDB}.pdb ]; then
-         RESO1=$(grep ${PDB} space_unit_reso.txt | head -n 1 | awk '{print $2}')
-         SPACE1=$(grep ${PDB} space_unit_reso.txt | head -n 1 | awk '{print $3}')
+while read apo_PDB; do 
+      echo ${apo_PDB}
+      if [ -f ${base_dir}/${apo_PDB}/${apo_PDB}.pdb ]; then
+         RESO1=$(grep ${apo_PDB} ${base_dir}/space_unit_reso.txt | head -n 1 | awk '{print $2}')
+         SPACE1=$(grep ${apo_PDB} ${base_dir}/space_unit_reso.txt | head -n 1 | awk '{print $3}')
          RESO1_lower=$(echo ${RESO1}-0.1 | bc -l)
          RESO1_upper=$(echo ${RESO1}+0.1 | bc -l)
-         UNIT1=$(grep ${PDB} space_unit_reso.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
+         UNIT1=$(grep ${apo_PDB} ${base_dir}/space_unit_reso.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
          UNIT1_out=$UNIT1
          UNIT1=( $UNIT1 )
          UNIT1_0_lower=$(echo ${UNIT1[0]}-1 | bc -l)
@@ -47,22 +49,18 @@ while read PDB; do
          UNIT1_5_upper=$(echo ${UNIT1[5]}+1 | bc -l)
          
          
-   file2=/wynton/group/fraser/swankowicz/apo_done2.txt
-   for line2 in $(cat $file2); do
-      #echo ${line2}
-      if [ -f /wynton/group/fraser/swankowicz/AWS_refine_done/${line2}/${line2}_qFit.pdb ]; then
-         #echo $line2 
-         RESO2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $2}')
-         SPACE2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | head -n 1 | awk '{print $3}')
+   holo_file=holo_PDBs.txt
+   while read holo_PDB; do 
+      if [ -f ${base_dir}/${holo_PDB}/${holo_PDB}.pdb ]; then
+         RESO2=$(grep ${holo_PDB} space_unit_reso.txt | head -n 1 | awk '{print $2}')
+         SPACE2=$(grep ${holo_PDB} space_unit_reso.txt | head -n 1 | awk '{print $3}')
          if (( `echo ${RESO2}'<='${RESO1_upper} | bc` )) && (( `echo ${RESO2}'>='${RESO1_lower} | bc` )); then
            if [ $SPACE1 == $SPACE2 ]; then
-             UNIT2=$(grep ${line2} /wynton/group/fraser/swankowicz/space_unit_reso_191118.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
+             UNIT2=$(grep ${holo_PDB} space_unit_reso.txt | tail -n 1 | sed "s/[(),]//g" | awk '{print $4,$5,$6,$7,$8,$9}')
              UNIT2=( $UNIT2 )
              if (( $(echo "${UNIT2[0]} <= ${UNIT1_0_upper}" |bc -l) )) && (( $(echo "${UNIT2[0]} >= ${UNIT1_0_lower}" |bc -l) )) && (( $(echo "${UNIT2[1]} <= ${UNIT1_1_upper}" |bc -l) )) && (( $(echo "${UNIT2[1]} >= ${UNIT1_1_lower}" |bc -l) )) && (( $(echo "${UNIT2[2]} <= ${UNIT1_2_upper}" |bc -l) )) && (( $(echo "${UNIT2[2]} >= ${UNIT1_2_lower}" |bc -l) )); then
-                echo 'pair1' 
                 if (( $(echo "${UNIT2[3]} <= ${UNIT1_3_upper}"|bc -l) )) && (( $(echo "${UNIT2[3]} >= ${UNIT1_3_lower}" |bc -l) )) && (( $(echo "${UNIT2[4]} <= ${UNIT1_4_upper}" |bc -l) )) && (( $(echo "${UNIT2[4]} >= ${UNIT1_4_lower}" |bc -l) )) &&  (( $(echo "${UNIT2[5]} <= ${UNIT1_5_upper}" |bc -l) )) && (( $(echo "${UNIT2[5]} >= ${UNIT1_5_lower}" |bc -l) )); then
-                   echo 'pair2'
-                   echo ${line2} >> /wynton/group/fraser/swankowicz/apo_pairs/${line}_potential_pairs.txt
+                   echo ${holo_PDB} >> ${base_dir}/potential_pairs/${apo_PDB}_potential_pairs.txt
                 fi
              fi
            fi
