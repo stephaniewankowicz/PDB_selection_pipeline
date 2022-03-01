@@ -3,15 +3,15 @@
 The pipeline starts with a list of PDB IDs with your specification (type of experiment, resolution, ect). This can be obtained from the [PDB](https://www.rcsb.org/). 
 
 Pipeline Requirements:
-[Phenix](https://phenix-online.org/documentation/install-setup-run.html) \n
+[Phenix](https://phenix-online.org/documentation/install-setup-run.html). 
 [qFit](https://github.com/ExcitedStates/qfit-3.0)
 
 Conda enviornment that contains the following packages (you can install these packages into the same conda env that qFit sits in):
 
-os
-sys
-pandas
-Bio.PDB
+os. 
+sys. 
+pandas. 
+Bio.PDB. 
 
 
 This repository contains a list of scripts that can be used to find and create isomorphous PDB pairs with the same sequence. The original intent was to select ligand bound and ligand unbound structures however this can be adapted to look for other PDB pairs. 
