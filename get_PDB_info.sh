@@ -29,10 +29,16 @@ while read -r line; do
   wget http://edmaps.rcsb.org/coefficients/${PDB}.mtz
 
 
-#____________________________________RUN MTZ DUMP & EXTRACT CRYSTALLOGRAPHIC INFO____________________________
+#____________________________________RUN MTZ DUMP & EXTRACT CRYSTALLOGRAPHIC INFO__________________________
   phenix.cif_as_mtz ${PDB}_ --ignore_bad_sigmas --extend_flags --merge #transfer cif into mtz file
-  phenix.mtz.dump $PDB.mtz > /wynton/group/fraser/swankowicz/mtz/191114/mtz_dump/${pdb}.dump #run mtz dump
+  phenix.mtz.dump ${PDB}.mtz >${PDB}.dump #run mtz dump
 
+#___________________________________ADD CRYSTALOGRAPHIC DATA TO TEXT FILE__________________________________
+  SPACE1=$(grep "^Space group number from file:" ${PDB}.dump | awk '{print $6,$7}')
+  UNIT1=$(grep "Unit cell:" ${PDB}.dump | tail -n 1 | sed "s/[(),]//g" | awk '{print $3,$4,$5,$6,$7,$8}')
+  RESO1=$(grep "^Resolution" ${PDB}.dump | head -n 1 | awk '{print $4}')
+
+  echo $line $RESO1 $SPACE1 $UNIT1 >> space_unit_reso.txt
 #__________________________________________DETERMINE HOLO OR APO___________________________________________
   find_largest_lig.py ${PDB}.pdb ${PDB}. #this script comes from qFit
   lig_name=$(cat ${PDB}_ligand_name.txt)
@@ -42,7 +48,7 @@ while read -r line; do
       echo ${PDB} >> PDB_Apo.txt #PDB is considered apo.
   fi
 
-#__________________________________________ GET SEQUENCE FROM PDB______________________________________________
+#__________________________________________ GET SEQUENCE FROM PDB____________________________________________
   SEQ1=$(python get_seq.py ${PDB}.pdb) #get_seq.py can be found in this repository
   echo "> ${PDB} ${SEQ1}" >> /wynton/group/fraser/swankowicz/sequences.txt
   
