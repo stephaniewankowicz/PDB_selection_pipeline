@@ -27,7 +27,14 @@ source activate qfit #conda env with qFit
 
 #____________________________________RUN MTZ DUMP & EXTRACT CRYSTALLOGRAPHIC INFO____________________________
   phenix.cif_as_mtz ${PDB}_ --ignore_bad_sigmas --extend_flags --merge #transfer cif into mtz file
-  phenix.mtz.dump $PDB.mtz > /wynton/group/fraser/swankowicz/mtz/191114/mtz_dump/${pdb}.dump #run mtz dump
+  phenix.mtz.dump ${PDB}.mtz > ${PDB}.dump
+  
+#___________________________________ADD CRYSTALOGRAPHIC DATA TO TEXT FILE__________________________________
+  SPACE1=$(grep "^Space group number from file:" ${PDB}.dump | awk '{print $6,$7}')
+  UNIT1=$(grep "Unit cell:" ${PDB}.dump | tail -n 1 | sed "s/[(),]//g" | awk '{print $3,$4,$5,$6,$7,$8}')
+  RESO1=$(grep "^Resolution" ${PDB}.dump | head -n 1 | awk '{print $4}')
+
+  echo $line $RESO1 $SPACE1 $UNIT1 >> ${base_folder}/space_unit_reso.txt
 
 #__________________________________________DETERMINE HOLO OR APO___________________________________________
   find_largest_lig.py ${PDB}.pdb ${PDB}. #this script comes from qFit
