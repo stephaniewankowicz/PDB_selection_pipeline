@@ -50,6 +50,6 @@ while read -r line; do
 
 #__________________________________________ GET SEQUENCE FROM PDB____________________________________________
   SEQ1=$(python get_seq.py ${PDB}.pdb) #get_seq.py can be found in this repository
-  echo "> ${PDB} ${SEQ1}" >> /wynton/group/fraser/swankowicz/sequences.txt
+  echo "> ${PDB} ${SEQ1}" >> ${base_dir}/sequences.txt
   
 done < $file
