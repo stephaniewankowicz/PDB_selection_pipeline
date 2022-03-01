@@ -12,8 +12,8 @@ source activate qfit #conda env with qFit
 
 
 #_________________________________________DOWNLOAD PDB/MTZ FILES AND CREATE FOLDERS_________________________
-  PDB = $1
-  base_folder = $2
+  PDB=$1
+  base_dir=$2
   if [ -d "/$PDB" ]; then
     echo "Folder exists." 
   else
@@ -34,19 +34,18 @@ source activate qfit #conda env with qFit
   UNIT1=$(grep "Unit cell:" ${PDB}.dump | tail -n 1 | sed "s/[(),]//g" | awk '{print $3,$4,$5,$6,$7,$8}')
   RESO1=$(grep "^Resolution" ${PDB}.dump | head -n 1 | awk '{print $4}')
 
-  echo $line $RESO1 $SPACE1 $UNIT1 >> ${base_folder}/space_unit_reso.txt
+  echo $line $RESO1 $SPACE1 $UNIT1 >> ${base_dir}/space_unit_reso.txt
 
 #__________________________________________DETERMINE HOLO OR APO___________________________________________
-  find_largest_lig.py ${PDB}.pdb ${PDB}. #this script comes from qFit
+  find_largest_lig.py ${PDB}.pdb ${PDB} #this script comes from qFit
   lig_name=$(cat ${PDB}_ligand_name.txt)
   if [ ! = ${lig_name} ]; then
-      echo ${PDB} ${lig_name} >> PDB_Holo.txt.  #PDB has ligand that is considered a potential 'holo'
+      echo ${PDB} ${lig_name} >> ${base_dir}/PDB_Holo.txt.  #PDB has ligand that is considered a potential 'holo'
   else
       echo ${PDB} >> PDB_Apo.txt #PDB is considered apo.
   fi
 
 #__________________________________________ GET SEQUENCE FROM PDB______________________________________________
   SEQ1=$(python get_seq.py ${PDB}.pdb) #get_seq.py can be found in this repository
-  echo "> ${PDB} ${SEQ1}" >> /wynton/group/fraser/swankowicz/sequences.txt
+  echo "> ${PDB} ${SEQ1}" >> ${base_dir}/sequences.txt
   
-done < $file
