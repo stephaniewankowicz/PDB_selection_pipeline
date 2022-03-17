@@ -52,4 +52,4 @@ while read -r line; do
   SEQ1=$(python get_seq.py ${PDB}.pdb) #get_seq.py can be found in this repository
   echo "> ${PDB} ${SEQ1}" >> ${base_dir}/sequences.txt
   
-done < $file
+done < $pdb_filelist
