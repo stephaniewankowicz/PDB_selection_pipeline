@@ -30,7 +30,7 @@ while read -r line; do
 
 
 #____________________________________RUN MTZ DUMP & EXTRACT CRYSTALLOGRAPHIC INFO__________________________
-  phenix.cif_as_mtz ${PDB}_ --ignore_bad_sigmas --extend_flags --merge #transfer cif into mtz file
+  phenix.cif_as_mtz ${PDB} --ignore_bad_sigmas --extend_flags --merge #transfer cif into mtz file
   phenix.mtz.dump ${PDB}.mtz >${PDB}.dump #run mtz dump
 
 #___________________________________ADD CRYSTALOGRAPHIC DATA TO TEXT FILE__________________________________
