@@ -25,9 +25,15 @@ export OMP_NUM_THREADS=1
 base_dir='/location/you/would/like/folders/of/PDBs/to/exist/' #base folder (where you want to put folders/pdb files)
 pdb_filelist=PDB_ID_2A_res.txt
 
-#________________________________________________RUN QFIT________________________________________________#
+#________________________________________________RUN QFIT________________________________________________
 PDB=$(cat $PDB_file | head -n $SGE_TASK_ID | tail -n 1)
 echo $PDB
 qfit_protein composite_omit_map.mtz -l 2FOFCWT,PH2FOFCWT ${PDB}_updated.pdb.updated_refine_001.pdb -p 8
 
+#________________________________________________RUN REREFINEMENT_________________________________________
+if [[ -e ${PDB}_qFit.pdb ]]; then
+   echo 'Refinement Done'
+else
+   qfit_final_refine_xray.sh ${PDB}.mtz multiconformer_model2.pdb
+fi
    
