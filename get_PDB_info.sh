@@ -24,9 +24,8 @@ while read -r line; do
     mkdir ${PDB}
   fi
   cd ${PDB}
-  wget https://files.rcsb.org/download/${PDB}.pdb
-  wget https://files.rcsb.org/download/${PDB}-sf.cif
-  wget http://edmaps.rcsb.org/coefficients/${PDB}.mtz
+  phenix.fetch_pdb ${PDB}
+  phenix.fetch_pdb -x ${PDB}
 
 
 #____________________________________RUN MTZ DUMP & EXTRACT CRYSTALLOGRAPHIC INFO__________________________
